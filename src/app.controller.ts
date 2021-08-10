@@ -11,9 +11,4 @@ export class AppController {
     return;
   }
 
-  @Get('/users')
-  getUsers() {
-    return [{id: 1, name: 'Benjamin'}]
-  }
-
 }
