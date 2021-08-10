@@ -17,7 +17,7 @@ import { AuthModule } from './auth/auth.module';
   imports: [
     SequelizeModule.forRoot({
         dialect: 'sqlite',
-        storage: './database.sqlite',
+        storage: './db.sqlite',
         models: [User, Category, Role, UserRoles],
         autoLoadModels: true
     }),
