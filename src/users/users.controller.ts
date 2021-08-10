@@ -1,10 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { UseGuards, Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { AddRoleDto } from './dto/add-role.dto';
 import { User } from './users.model';
+
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard } from '../auth/roles.guard';
+import { Roles } from '../auth/roles-auth.decorator';
 
 @ApiTags('Пользователи')
 @Controller('users')
@@ -23,12 +28,25 @@ export class UsersController {
 
   /* ПОЛУЧЕНИЕ СПИСКА ПОЛЬЗОВАТЕЛЕЙ */
 
-  @ApiOperation({summary: 'Получение списка пользователей'})
+  @ApiOperation({summary: 'Получение списка'})
   @ApiResponse({status: 200, type: [User]})
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
   @Get()
   findAll() {
     return this.usersService.findAll();
   }
+
+  /* ВЫДАТЬ РОЛЬ ПОЛЬЗОВАТЕЛЮ */
+  @ApiOperation({summary: 'Выдать роль'})
+  @ApiResponse({status: 200})
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
+  @Post('/role')
+  addRole(@Body() dto: AddRoleDto) {
+    return this.usersService.addRole(dto);
+  }
+
 
   @Get(':id')
   findOne(@Param('id') id: string) {
