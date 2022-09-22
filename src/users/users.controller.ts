@@ -16,6 +16,17 @@ import { Roles } from '../auth/roles-auth.decorator';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  /* ПОЛУЧЕНИЕ СПИСКА ПОЛЬЗОВАТЕЛЕЙ */
+
+  @ApiOperation({summary: 'Получение списка пользователей'})
+  @ApiResponse({status: 200, type: [User]})
+  // @Roles('ADMIN')
+  // @UseGuards(JwtAuthGuard)
+  @Get()
+  findAll() {
+    return this.usersService.findAll();
+  }
+
   /*  СОЗДАНИЕ ПОЛЬЗОВАТЕЛЯ */
 
   @ApiOperation({summary: 'Создание пользователя'})
@@ -26,22 +37,11 @@ export class UsersController {
   }
 
 
-  /* ПОЛУЧЕНИЕ СПИСКА ПОЛЬЗОВАТЕЛЕЙ */
-
-  @ApiOperation({summary: 'Получение списка'})
-  @ApiResponse({status: 200, type: [User]})
-  @Roles('ADMIN')
-  @UseGuards(RolesGuard)
-  @Get()
-  findAll() {
-    return this.usersService.findAll();
-  }
-
   /* ВЫДАТЬ РОЛЬ ПОЛЬЗОВАТЕЛЮ */
   @ApiOperation({summary: 'Выдать роль'})
   @ApiResponse({status: 200})
-  @Roles('ADMIN')
-  @UseGuards(RolesGuard)
+  // @Roles('ADMIN')
+  // @UseGuards(RolesGuard)
   @Post('/role')
   addRole(@Body() dto: AddRoleDto) {
     return this.usersService.addRole(dto);

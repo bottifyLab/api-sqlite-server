@@ -10,20 +10,21 @@ async function bootstrap() {
 
   app.enableCors();
 
-  app.setBaseViewsDir(join(__dirname,'../views'));
-  app.setViewEngine('pug');
+  // app.setBaseViewsDir(join(__dirname,'../views'));
+  // app.setViewEngine('pug');
 
   const config = new DocumentBuilder()
-    .setTitle('ДОКУМЕНТАЦИЯ К OWL SHOP API ')
-    .setDescription('API для админки и бота')
-    .setVersion('1.0.0')
-    .addTag('OWL SHOP')
+    .setTitle(process.env.TITLE || 'Заголовок')
+    .setDescription(process.env.DESCRIPTION || 'Описание')
+    .setVersion(process.env.VERSION || '0.0.1')
+    // .addTag(process.env.TAG || 'Тэг')
     .build()
 
   const document = SwaggerModule.createDocument(app,config);
   SwaggerModule.setup('/doc', app, document);
 
-  await app.listen(process.env.PORT || 3000);
+
+  await app.listen(process.env.PORT || 5000);
 
 }
 bootstrap();

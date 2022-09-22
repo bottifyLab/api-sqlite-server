@@ -24,8 +24,8 @@ export class UsersService {
     return users;
   }
 
-  async getUserByEmail(email: string) {
-    const user = await this.userRepository.findOne({where: {email}, include: {all: true }});
+  async getUserByLogin(login: string) {
+    const user = await this.userRepository.findOne({where: {login}, include: {all: true }});
     return user;
   }
 
@@ -39,8 +39,12 @@ export class UsersService {
     throw new HttpException('Пользователь или роль не существует', HttpStatus.NOT_FOUND)
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: number) {
+    const user = await this.userRepository.findByPk(id);
+    if (user) {
+      return user;
+    }
+    throw new HttpException('Пользователь не существует', HttpStatus.NOT_FOUND)
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {

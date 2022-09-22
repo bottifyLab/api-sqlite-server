@@ -19,7 +19,7 @@ export class AuthService {
 
   async registration(createUserDto: CreateUserDto) {
 
-    const candidate = await this.userService.getUserByEmail(createUserDto.email);
+    const candidate = await this.userService.getUserByLogin(createUserDto.login);
 
     if (candidate) {
         throw new HttpException('Пользователь уже существует', HttpStatus.BAD_REQUEST)
@@ -33,7 +33,7 @@ export class AuthService {
   private async generateToken(user: User) {
     const payload = {
         id: user.id,
-        email: user.email,
+        login: user.login,
         roles: user.roles
     }
     return {
@@ -42,7 +42,7 @@ export class AuthService {
   }
 
   private async validateUser(userDto: CreateUserDto) {
-    const user = await this.userService.getUserByEmail(userDto.email);
+    const user = await this.userService.getUserByLogin(userDto.login);
     const passwordEquals = await bcrypt.compare(userDto.password, user.password);
     if (user && passwordEquals) {
         return user;
